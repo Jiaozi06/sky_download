@@ -16,3 +16,15 @@ GitHub Actions 每 10 分钟分别检查网易官服和华为 AppGallery 海外�
 python scripts/update_downloads.py
 python scripts/sky_channel_links.py huawei hms_core international_huawei --json
 ```
+
+## 部署到 Vercel
+
+在 Vercel 导入本仓库，Framework Preset 选择 **Other**，Root Directory 设为 **`web`**，启用 **Include source files outside of the Root Directory in the Build Step**。关闭 **Skip deployment for unaffected projects**，让根目录的 JSON 提交也触发部署。构建命令和输出目录由 `web/vercel.json` 提供。
+
+- 打开网站首页可查看各渠道的下载按钮。
+- 给首页请求加上 `type: json` 请求头，可获得原始 JSON。也可以直接请求 `/downloads.json`。
+- 浏览器无法添加专用下载请求头或渠道直链未通过验证时，按钮会打开官方渠道页。
+
+```sh
+curl -H "type: json" https://your-project.vercel.app/
+```

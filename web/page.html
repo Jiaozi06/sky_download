@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>光·遇下载</title>
+  <style>
+    :root {
+      color: #f1f6ff;
+      background: #101e31;
+      font: 16px/1.5 system-ui, "Microsoft YaHei", sans-serif;
+    }
+
+    body {
+      box-sizing: border-box;
+      min-height: 100dvh;
+      display: grid;
+      place-items: center;
+      margin: 0;
+      padding: 24px;
+      background: radial-gradient(ellipse at 50% 0%, #315979, transparent 70%);
+    }
+
+    main {
+      width: min(100%, 560px);
+    }
+
+    ul {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      padding: 0;
+      margin: 0;
+      list-style: none;
+    }
+
+    a, span[aria-disabled] {
+      box-sizing: border-box;
+      display: grid;
+      place-items: center;
+      min-height: 54px;
+      height: 100%;
+      padding: 12px 14px;
+      border: 1px solid #627e9b;
+      border-radius: 10px;
+      background: #213b54;
+      color: inherit;
+      font-weight: 600;
+      text-align: center;
+      text-decoration: none;
+    }
+
+    a:hover {
+      border-color: #a8ddff;
+      background: #2a4d6c;
+    }
+
+    a:focus-visible {
+      outline: 2px solid #c2eaff;
+      outline-offset: 3px;
+    }
+
+    span[aria-disabled] {
+      opacity: .65;
+    }
+
+    @media (max-width: 320px) {
+      ul {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main aria-label="光·遇下载">
+    <ul>
+      <!-- Download buttons -->
+    </ul>
+  </main>
+</body>
+</html>

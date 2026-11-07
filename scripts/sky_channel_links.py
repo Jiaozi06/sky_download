@@ -27,6 +27,7 @@ class Release:
     fallback: str = ""
     headers: dict[str, str] = field(default_factory=dict)
     version_code: int | None = None
+    browser_url: str = ""
 
 
 def request(url, headers=None):
@@ -73,7 +74,12 @@ def vivo():
     )
     if str(row.get("id")) != "2902164":
         raise ValueError("vivo 没有返回《光·遇》条目")
-    return Release("https://appstore.vivo.com.cn/appinfo/downloadApkFile?id=2902164", row["version_name"])
+    apk_path = row.get("apk") or ""
+    browser_url = ""
+    if apk_path.startswith("/developer/apk/") and apk_path.endswith(".apk"):
+        browser_url = f"https://apkwificdn1-v6dl.vivo.com.cn/appstore{apk_path}"
+    return Release("https://appstore.vivo.com.cn/appinfo/downloadApkFile?id=2902164", row["version_name"],
+                   browser_url=browser_url)
 
 
 def qq():
@@ -181,6 +187,13 @@ def resolve(channel, release=None):
             failures.append(str(error))
             continue
         result.update(url=url, size=size, verified=True)
+        if release.browser_url:
+            try:
+                check_apk(release.browser_url, size, release.headers)
+            except (URLError, OSError, ValueError):
+                pass
+            else:
+                result["browser_url"] = release.browser_url
         return result
     result.update(verified=False, error="; ".join(failures))
     return result

@@ -1,0 +1,23 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": null,
+  "buildCommand": "node build.mjs",
+  "outputDirectory": "dist",
+  "headers": [
+    {
+      "source": "/",
+      "headers": [{ "key": "Vary", "value": "type" }]
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/",
+      "has": [{ "type": "header", "key": "type", "value": "json" }],
+      "destination": "/downloads.json"
+    },
+    {
+      "source": "/",
+      "destination": "/page.html"
+    }
+  ]
+}
