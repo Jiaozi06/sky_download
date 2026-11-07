@@ -1,4 +1,4 @@
-"""Resolve the current Sky (光·遇) APK for each supported mainland channel."""
+"""Resolve current Sky (光·遇) APKs from supported channels."""
 
 import argparse
 from concurrent.futures import ThreadPoolExecutor
@@ -127,6 +127,10 @@ def huawei_package(package, *, keep_distributor=False):
     return Release(direct, row["version"], size, fallback=row["downurl"], version_code=int(row["versionCode"]))
 
 
+def international_huawei():
+    return huawei_package("com.tgc.sky.android.huawei", keep_distributor=True)
+
+
 CHANNELS = {
     "official": official,
     "bilibili": bilibili,
@@ -136,7 +140,7 @@ CHANNELS = {
     "233": leyuan,
     "huawei": lambda: huawei_package("com.netease.sky.huawei"),
     "hms_core": lambda: huawei_package("com.huawei.hwid"),
-    "international_huawei": lambda: huawei_package("com.tgc.sky.android.huawei", keep_distributor=True),
+    "international_huawei": international_huawei,
 }
 
 
