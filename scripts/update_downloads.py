@@ -8,7 +8,7 @@ from pathlib import Path
 from sky_channel_links import CHANNELS, OFFICIAL_URL, official, resolve
 
 
-OUTPUT = Path(__file__).with_name("downloads.json")
+OUTPUT = Path(__file__).resolve().parents[1] / "downloads.json"
 
 
 def record(result, previous):

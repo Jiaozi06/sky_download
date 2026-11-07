@@ -1,6 +1,6 @@
 # 光·遇下载链接
 
-[downloads.json](downloads.json) 保存网易官服、哔哩哔哩、vivo、应用宝、4399、233 乐园和华为的安卓下载地址。华为附带的 HMS Core 位于 `channels.huawei.dependencies.hms_core`。
+[downloads.json](../downloads.json) 保存网易官服、哔哩哔哩、vivo、应用宝、4399、233 乐园和华为的安卓下载地址。华为附带的 HMS Core 位于 `channels.huawei.dependencies.hms_core`。
 
 GitHub Actions 每小时第 04、14、24、34、44、54 分钟（UTC）检查网易安卓下载页。只有网易的版本或构建号发生变化，才查询其他渠道并提交 JSON。首次生成也会查询全部渠道。渠道发包时间可能不同，记录中的版本来自各自渠道。GitHub 的定时任务可能延迟，公开仓库连续 60 天无活动时，GitHub 会停用定时任务。
 
@@ -13,6 +13,6 @@ GitHub Actions 每小时第 04、14、24、34、44、54 分钟（UTC）检查网
 本地运行（Python 3.10 或更高版本）：
 
 ```sh
-python update_downloads.py
-python sky_channel_links.py huawei hms_core international_huawei --json
+python scripts/update_downloads.py
+python scripts/sky_channel_links.py huawei hms_core international_huawei --json
 ```
