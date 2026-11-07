@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "official_version": "0.16.7",
+  "official_version_code": 421589,
+  "updated_at": "2026-11-07T11:16:06+00:00",
+  "channels": {
+    "official": {
+      "url": "https://adl.netease.com/d/g/sky/c/gw?type=android",
+      "size": 2067797107,
+      "version": "0.16.7",
+      "version_code": 421589,
+      "verified": true,
+      "link_type": "download_page"
+    },
+    "bilibili": {
+      "url": "https://pkg.biligame.com/games/gy_0.16.7_19_20261019_012322_3061f.apk",
+      "size": 2071758312,
+      "version": "0.16.7",
+      "verified": true
+    },
+    "vivo": {
+      "url": "https://appstore.vivo.com.cn/appinfo/downloadApkFile?id=2902164",
+      "size": 2042963497,
+      "version": "0.16.7",
+      "verified": true
+    },
+    "qq": {
+      "url": "https://imtt.dd.qq.com/sjy.00009/sjy.00002/16891/apk/82DF23B641478FF720FCB7A443EC5141.apk?fsname=com.tencent.tmgp.eyou.eygy_421589.apk",
+      "size": 2045557921,
+      "version": "0.16.7",
+      "verified": true
+    },
+    "4399": {
+      "url": "https://sj.yxhapk.com/aes/2421dd4d2d603683a35e00b245a566c5c809f4f8d8e63a55f36b198c982974c2b8b3af37f78050696502634b778c406044e4f018fc03a18fba18d64efd63e81b8026ebe60e23acfbbeab411c69b30202f4879db800d00c4fbfef34b16bcdd877",
+      "size": 2068761598,
+      "version_code": 421589,
+      "headers": {
+        "User-Agent": "4399GameCenter/9.7.0.44"
+      },
+      "verified": true
+    },
+    "233": {
+      "url": "https://game0.233xyx.com/game/apk/normal/v0/com.netease.sky.meta/db76c31af0490d21b8536909f4ed14c1.apk",
+      "size": 2056914312,
+      "version": "0.16.7",
+      "version_code": 421589,
+      "verified": false,
+      "error": "HTTP Error 424: Failed Dependency"
+    },
+    "huawei": {
+      "url": "https://store-drcn.hispace.dbankcloud.com/dl/appdl/application/apk/d9/d9cb587b210a4c249df1905ee427e9d5/com.netease.sky.huawei.2610162005.apk",
+      "size": 2044118976,
+      "version": "0.16.7",
+      "version_code": 421589,
+      "verified": true,
+      "dependencies": {
+        "hms_core": {
+          "url": "https://store-drcn.hispace.dbankcloud.com/dl/appdl/application/apk/46/46d55bc0173448848cad39e9b77c38e3/com.huawei.hwid.2610131149.apk",
+          "size": 56701278,
+          "version": "6.16.4.362",
+          "version_code": 61604362,
+          "verified": true
+        }
+      }
+    }
+  },
+  "international": {
+    "google_play": "https://play.google.com/store/apps/details?id=com.tgc.sky.android",
+    "huawei": {
+      "url": "https://store-drcn.hispace.dbankcloud.com/dl/appdl/application/apk/bd/bdf0504fa836419bb1a1b35cbbbc997c/com.tgc.sky.android.huawei.2610301712.apk?distOpEntity=HKS",
+      "size": 2124363868,
+      "version": "0.35.2 (426499)",
+      "version_code": 426499,
+      "verified": true
+    }
+  }
+}

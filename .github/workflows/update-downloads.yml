@@ -1,0 +1,43 @@
+name: 更新光遇下载链接
+
+on:
+  schedule:
+    - cron: '4-59/10 * * * *'
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/update-downloads.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-downloads
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    env:
+      DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+      PYTHONDONTWRITEBYTECODE: '1'
+      PYTHONUTF8: '1'
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+      - name: 检查网易官服版本
+        run: python3 update_downloads.py
+      - name: 提交变更
+        shell: bash
+        run: |
+          git add -- downloads.json
+          if git diff --cached --quiet; then
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m '更新光遇下载链接'
+          git push origin "HEAD:refs/heads/$DEFAULT_BRANCH"
