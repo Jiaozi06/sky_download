@@ -9,7 +9,7 @@ GitHub Actions 每 10 分钟分别检查网易官服和华为 AppGallery 海外�
 - `verified: false` 表示本次探测失败，`error` 提供原因。若渠道没有返回地址且有历史记录，则保留旧链接并标记 `stale: true`。
 - 4399 下载需要使用 JSON 里的 `headers.User-Agent`。其余渠道有直链时可直接请求 `url`。
 - 国际服位于 `international`，包含 Google Play 商店入口及华为 AppGallery 海外版 APK。新 APK 通过检查后才替换旧链接。
-- 荣耀位于 `channels.honor`。网易构建变更时，Action 使用临时 Android 模拟器里的荣耀应用市场取得 CDN 地址，只在地址通过文件头和大小检查后替换旧记录。也可手动运行 Action 并勾选 `refresh_honor` 重试。
+- 荣耀位于 `channels.honor`。网易构建变更时，Action 会在临时 Android 模拟器里尝试获取荣耀 CDN 地址。首次启动停在荣耀的隐私声明时，会保留上次验证的链接，并继续发布其他渠道的更新。已打开光·遇详情页且暂停测试下载的本地模拟器，可通过 `python scripts/update_honor.py --existing-log` 读取记录并刷新 JSON。
 
 本地运行（Python 3.10 或更高版本）：
 

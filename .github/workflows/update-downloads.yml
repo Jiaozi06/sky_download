@@ -40,7 +40,7 @@ jobs:
         id: honor
         if: ${{ !cancelled() && steps.checkout.outcome == 'success' }}
         env:
-          REFRESH_HONOR: ${{ inputs.refresh_honor || github.event_name == 'push' }}
+          REFRESH_HONOR: ${{ inputs.refresh_honor }}
         run: |
           before=$(git show HEAD:downloads.json | jq -r '.official_version_code')
           after=$(jq -r '.official_version_code' downloads.json)
@@ -55,6 +55,7 @@ jobs:
           sudo udevadm trigger --name-match=kvm
       - name: 从荣耀应用市场获取 APK 地址
         if: ${{ !cancelled() && steps.honor.outputs.refresh == 'true' }}
+        continue-on-error: true
         uses: reactivecircus/android-emulator-runner@69c8581131285561115a2e413eb0037446bdc2d6 # v2.35.0
         with:
           api-level: 35
