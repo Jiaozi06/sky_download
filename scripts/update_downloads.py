@@ -53,6 +53,8 @@ def refresh_mainland(previous):
     # The signed CDN URL expires even if the build has not changed.
     official_record.update(url=OFFICIAL_URL, link_type="download_page")
     results["huawei"]["dependencies"] = {"hms_core": results.pop("hms_core")}
+    if "honor" in previous_channels:
+        results["honor"] = previous_channels["honor"]
     print(f"网易官服更新到 {current.version} ({current.version_code})")
     return {
         "official_version": current.version,

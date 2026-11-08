@@ -12,6 +12,7 @@ const buttons = [
   ["4399", channels["4399"], "https://a.4399.cn/mobile/112700.html"],
   ["233 乐园", channels["233"], "https://www.233leyuan.com/game-detail/1433471"],
   ["华为", channels.huawei, "https://appgallery.huawei.com/app/C100685413"],
+  ["荣耀", channels.honor],
   ["HMS Core", channels.huawei?.dependencies?.hms_core, "https://appgallery.huawei.com/app/C10132067"],
   ["国际服 · 华为", international?.huawei, "https://appgallery.huawei.com/app/C105091411"],
   ["国际服 · Google Play", { url: international?.google_play, verified: true }],

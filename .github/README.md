@@ -1,6 +1,6 @@
 # 光·遇下载链接
 
-[downloads.json](../downloads.json) 保存网易官服、哔哩哔哩、vivo、应用宝、4399、233 乐园和华为的安卓下载地址。华为附带的 HMS Core 位于 `channels.huawei.dependencies.hms_core`。
+[downloads.json](../downloads.json) 保存网易官服、哔哩哔哩、vivo、应用宝、4399、233 乐园、华为和荣耀的安卓下载地址。华为附带的 HMS Core 位于 `channels.huawei.dependencies.hms_core`。
 
 GitHub Actions 每 10 分钟分别检查网易官服和华为 AppGallery 海外版的版本及构建号。网易更新时统一刷新国服渠道和 HMS Core。国际服更新时只刷新 `international`。两边的检查互不依赖，只有 JSON 发生变化才提交。渠道发包时间可能不同，记录中的版本来自各自渠道。GitHub 的定时任务可能延迟，公开仓库连续 60 天无活动时，GitHub 会停用定时任务。
 
@@ -9,6 +9,7 @@ GitHub Actions 每 10 分钟分别检查网易官服和华为 AppGallery 海外�
 - `verified: false` 表示本次探测失败，`error` 提供原因。若渠道没有返回地址且有历史记录，则保留旧链接并标记 `stale: true`。
 - 4399 下载需要使用 JSON 里的 `headers.User-Agent`。其余渠道有直链时可直接请求 `url`。
 - 国际服位于 `international`，包含 Google Play 商店入口及华为 AppGallery 海外版 APK。新 APK 通过检查后才替换旧链接。
+- 荣耀位于 `channels.honor`。网易构建变更时，Action 使用临时 Android 模拟器里的荣耀应用市场取得 CDN 地址，只在地址通过文件头和大小检查后替换旧记录。也可手动运行 Action 并勾选 `refresh_honor` 重试。
 
 本地运行（Python 3.10 或更高版本）：
 

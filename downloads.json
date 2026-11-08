@@ -2,7 +2,7 @@
   "schema_version": 1,
   "official_version": "0.16.7",
   "official_version_code": 421589,
-  "updated_at": "2026-11-07T11:16:06+00:00",
+  "updated_at": "2026-11-08T15:07:32+00:00",
   "channels": {
     "official": {
       "url": "https://adl.netease.com/d/g/sky/c/gw?type=android",
@@ -63,6 +63,13 @@
           "verified": true
         }
       }
+    },
+    "honor": {
+      "url": "https://apppkg-default-drcn.hihonorcdn.com/apk/upload_2111061789029580800.apk",
+      "size": 2050221157,
+      "version": "0.16.7",
+      "version_code": 421589,
+      "verified": true
     }
   },
   "international": {
