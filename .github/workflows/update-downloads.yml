@@ -63,10 +63,10 @@ jobs:
           profile: pixel_5
           disable-animations: true
           script: |
-            curl -fL --retry 2 -o "$RUNNER_TEMP/honor-market.apk" https://www.honor.com/content/dam/honor/cn/tech/honor-app-market/img/AppMarket_16.0.40.305_productRelease_20250904152045_ab.apk
-            echo "548cfe35fe9ce04e15ce11f5861f888ed886d6a5bb28cc378ee9c684b94ee71f  $RUNNER_TEMP/honor-market.apk" | sha256sum -c -
-            adb install "$RUNNER_TEMP/honor-market.apk"
-            adb shell cmd locale set-app-locales com.hihonor.appmarket --user 0 --locales zh-CN
+            curl -fL --retry 2 -o "$RUNNER_TEMP/honor-market.apk" https://www.honor.com/content/dam/honor/cn/tech/honor-app-market/img/AppMarket_16.0.40.305_productRelease_20250904152045_ab.apk || { echo '::error::荣耀应用市场 APK 下载失败'; exit 1; }
+            echo "548cfe35fe9ce04e15ce11f5861f888ed886d6a5bb28cc378ee9c684b94ee71f  $RUNNER_TEMP/honor-market.apk" | sha256sum -c - || { echo '::error::荣耀应用市场 APK 校验失败'; exit 1; }
+            result=$(adb install "$RUNNER_TEMP/honor-market.apk" 2>&1) || { echo "::error::荣耀应用市场安装失败：$result"; exit 1; }
+            adb shell cmd locale set-app-locales com.hihonor.appmarket --user 0 --locales zh-CN || { echo '::error::荣耀应用市场语言设置失败'; exit 1; }
             python3 scripts/update_honor.py
       - name: 提交变更
         if: ${{ !cancelled() && steps.checkout.outcome == 'success' }}

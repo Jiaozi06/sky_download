@@ -51,7 +51,8 @@ def details(existing_log):
                 x0, y0, x1, y1 = map(int, bounds)
                 return match[0], str((x0 + x1) // 2), str((y0 + y1) // 2)
         sleep(1)
-    raise ValueError("荣耀应用市场没有打开可下载的光·遇详情页")
+    labels = [node.get("text") for node in nodes.values() if node.get("text")]
+    raise ValueError("荣耀应用市场没有打开可下载的光·遇详情页。当前界面：" + " / ".join(labels[:8]))
 
 
 def capture(existing_log):
@@ -114,4 +115,9 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except (OSError, ValueError, ElementTree.ParseError, subprocess.SubprocessError) as error:
+        message = " ".join(str(error).splitlines())
+        print(f"::error::{message}" if os.environ.get("GITHUB_ACTIONS") == "true" else message)
+        raise SystemExit(1)
