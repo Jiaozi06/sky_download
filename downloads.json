@@ -1,58 +1,59 @@
 {
   "schema_version": 1,
-  "official_version": "0.16.7",
-  "official_version_code": 421589,
-  "updated_at": "2026-11-08T15:07:32+00:00",
+  "official_version": "0.16.8",
+  "official_version_code": 421629,
+  "updated_at": "2026-11-11T17:19:16+00:00",
   "channels": {
     "official": {
       "url": "https://adl.netease.com/d/g/sky/c/gw?type=android",
-      "size": 2067797107,
-      "version": "0.16.7",
-      "version_code": 421589,
+      "size": 2067787714,
+      "version": "0.16.8",
+      "version_code": 421629,
       "verified": true,
       "link_type": "download_page"
     },
     "bilibili": {
-      "url": "https://pkg.biligame.com/games/gy_0.16.7_19_20261019_012322_3061f.apk",
-      "size": 2071758312,
-      "version": "0.16.7",
-      "verified": true
+      "url": "https://pkg.biligame.com/games/gy_0.16.8_20261111_043613_6175d.apk",
+      "size": 2071754216,
+      "version": "0.16.8",
+      "verified": false,
+      "error": "HTTP Error 403: Forbidden; HTTP Error 403: Forbidden"
     },
     "vivo": {
       "url": "https://appstore.vivo.com.cn/appinfo/downloadApkFile?id=2902164",
-      "size": 2042963497,
-      "version": "0.16.7",
+      "size": 2042957810,
+      "version": "0.16.8",
       "verified": true,
-      "browser_url": "https://apkwificdn1-v6dl.vivo.com.cn/appstore/developer/apk/20261016/202610161949551vx73.apk"
+      "browser_url": "https://apkwificdn1-v6dl.vivo.com.cn/appstore/developer/apk/20261110/202611102049339mqex.apk"
     },
     "qq": {
-      "url": "https://imtt.dd.qq.com/sjy.00009/sjy.00002/16891/apk/82DF23B641478FF720FCB7A443EC5141.apk?fsname=com.tencent.tmgp.eyou.eygy_421589.apk",
-      "size": 2045557921,
-      "version": "0.16.7",
+      "url": "https://imtt.dd.qq.com/sjy.00009/sjy.00002/16891/apk/39BF702356DDD6F9FDAECF20E91390AA.apk?fsname=com.tencent.tmgp.eyou.eygy_421629.apk",
+      "size": 2045550916,
+      "version": "0.16.8",
       "verified": true
     },
     "4399": {
-      "url": "https://sj.yxhapk.com/aes/2421dd4d2d603683a35e00b245a566c5c809f4f8d8e63a55f36b198c982974c2b8b3af37f78050696502634b778c406044e4f018fc03a18fba18d64efd63e81b8026ebe60e23acfbbeab411c69b30202f4879db800d00c4fbfef34b16bcdd877",
-      "size": 2068761598,
-      "version_code": 421589,
+      "url": "https://hot.yxhapk.com/aes/e9ec51c0ee4ee19ad4cf63e5384a3a5751d2b234f78f4d7adde9608aad307312157340abb0a91060ad70f607dcf3b276b35cadf91964131470bbeed80c3c43a0b207eb5105c1b3a45bf223d060d81beee98228e8eaed9764b45c5bcc570bb374",
+      "size": 2068745515,
+      "version_code": 421629,
       "headers": {
         "User-Agent": "4399GameCenter/9.7.0.44"
       },
       "verified": true
     },
     "233": {
-      "url": "https://game0.233xyx.com/game/apk/normal/v0/com.netease.sky.meta/db76c31af0490d21b8536909f4ed14c1.apk",
-      "size": 2056914312,
-      "version": "0.16.7",
-      "version_code": 421589,
+      "url": "https://game0.233xyx.com/game/apk/normal/v0/com.netease.sky.meta/f5ea92f8be8523cf9e102e2080973e37.apk",
+      "size": 2056900989,
+      "version": "0.16.8",
+      "version_code": 421629,
       "verified": false,
       "error": "HTTP Error 424: Failed Dependency"
     },
     "huawei": {
-      "url": "https://store-drcn.hispace.dbankcloud.com/dl/appdl/application/apk/d9/d9cb587b210a4c249df1905ee427e9d5/com.netease.sky.huawei.2610162005.apk",
-      "size": 2044118976,
-      "version": "0.16.7",
-      "version_code": 421589,
+      "url": "https://store-drcn.hispace.dbankcloud.com/dl/appdl/application/apk/bf/bf1d0c87726544c0a8943a2a9f471195/com.netease.sky.huawei.2611102100.apk",
+      "size": 2044103467,
+      "version": "0.16.8",
+      "version_code": 421629,
       "verified": true,
       "dependencies": {
         "hms_core": {
