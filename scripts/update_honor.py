@@ -75,12 +75,18 @@ def details(existing_log):
         adb("shell", "rm", "-f", DUMP)
         try:
             adb("shell", "uiautomator", "dump", DUMP)
+            nodes = list(ElementTree.fromstring(
+                adb("exec-out", "cat", DUMP)
+            ).iter("node"))
         except subprocess.CalledProcessError as error:
             if error.returncode != 139:
                 raise
-        nodes = list(ElementTree.fromstring(
-            adb("exec-out", "cat", DUMP)
-        ).iter("node"))
+            sleep(1)
+            continue
+        except ElementTree.ParseError:
+            # Android may return no hierarchy while the first activity is starting.
+            sleep(1)
+            continue
         by_id = {node.get("resource-id"): node for node in nodes}
         version = by_id.get(f"{MARKET}:id/tv_version_name")
         button = by_id.get(f"{MARKET}:id/app_detail_download_btn")
