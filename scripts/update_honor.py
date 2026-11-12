@@ -5,6 +5,7 @@ import json
 import os
 import re
 import subprocess
+import tempfile
 from datetime import datetime, timezone
 from pathlib import Path
 from time import monotonic, sleep
@@ -120,9 +121,16 @@ def details(existing_log):
 
 def capture(existing_log):
     version, x, y = details(existing_log)
+    log_process = None
+    live_log = None
     if not existing_log:
         start = int(adb("shell", "date", "+%s").strip())
         debug = Path(os.environ.get("RUNNER_TEMP", ".")) / "honor-detail"
+        with tempfile.NamedTemporaryFile(prefix="honor-download-", suffix=".log", delete=False) as output:
+            live_log = Path(output.name)
+        with live_log.open("wb") as output:
+            log_process = subprocess.Popen(("adb", "logcat", "-v", "epoch", "-T", "1", "-s", "AMLog[8d4e9cb8fb]:I"),
+                                           stdout=output, stderr=subprocess.DEVNULL)
         if os.environ.get("GITHUB_ACTIONS") == "true":
             debug.with_suffix(".xml").write_text(adb("exec-out", "cat", DUMP), encoding="utf-8")
             debug.with_suffix(".png").write_bytes(subprocess.check_output(
@@ -143,7 +151,8 @@ def capture(existing_log):
         deadline = monotonic() + 25
         diagnostics = []
         while monotonic() < deadline:
-            lines = adb("logcat", "-d", "-v", "epoch", "-t", "4000").splitlines()
+            lines = (live_log.read_text(encoding="utf-8", errors="replace") if live_log else
+                     adb("logcat", "-d", "-v", "epoch", "-s", "AMLog[8d4e9cb8fb]:I")).splitlines()
             for line in reversed(lines):
                 if not existing_log and (not line[:1].isdigit() or float(line.split()[0]) < start):
                     continue
@@ -160,12 +169,16 @@ def capture(existing_log):
                 break
             sleep(0.3)
     finally:
+        if log_process is not None:
+            log_process.terminate()
+            log_process.wait(timeout=8)
         if not existing_log:
             if os.environ.get("GITHUB_ACTIONS") == "true":
-                debug.with_suffix(".log").write_text(adb("logcat", "-d", "-v", "epoch", "-t", "10000"), encoding="utf-8")
+                debug.with_suffix(".log").write_bytes(live_log.read_bytes())
                 debug.with_name("honor-detail-after.png").write_bytes(subprocess.check_output(
                     ("adb", "exec-out", "screencap", "-p"), timeout=25))
             adb("shell", "am", "force-stop", MARKET)
+            live_log.unlink(missing_ok=True)
     for line in dict.fromkeys(diagnostics[-10:]):
         print(line)
     raise ValueError("荣耀日志没有返回当前渠道包的 CDN 地址")
