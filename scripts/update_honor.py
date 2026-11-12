@@ -96,7 +96,7 @@ def details(existing_log):
                         ("tv_version_name", "zy_tv_version_name", "tv_version")
                         if f"{MARKET}:id/{name}" in by_id), None)
         button = next((by_id[f"{MARKET}:id/{name}"] for name in
-                       ("app_detail_download_btn", "market_download_btn")
+                       ("app_detail_download_btn", "app_detail_download_btn_small", "market_download_btn")
                        if f"{MARKET}:id/{name}" in by_id), None)
         if version is not None and button is not None:
             match = re.search(r"\d+(?:\.\d+)+", version.get("text", ""))
