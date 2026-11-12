@@ -92,8 +92,12 @@ def details(existing_log):
         by_id = {node.get("resource-id"): node for node in nodes}
         if any(node.get("text") == "本地区暂未提供服务" for node in nodes):
             raise ValueError("荣耀应用市场的设备地区不受支持，请检查模拟器国家设置")
-        version = by_id.get(f"{MARKET}:id/tv_version_name")
-        button = by_id.get(f"{MARKET}:id/app_detail_download_btn")
+        version = next((by_id[f"{MARKET}:id/{name}"] for name in
+                        ("tv_version_name", "zy_tv_version_name", "tv_version")
+                        if f"{MARKET}:id/{name}" in by_id), None)
+        button = next((by_id[f"{MARKET}:id/{name}"] for name in
+                       ("app_detail_download_btn", "market_download_btn")
+                       if f"{MARKET}:id/{name}" in by_id), None)
         if version is not None and button is not None:
             match = re.search(r"\d+(?:\.\d+)+", version.get("text", ""))
             bounds = re.findall(r"\d+", button.get("bounds", ""))
@@ -122,7 +126,7 @@ def details(existing_log):
     labels = [node.get("text") for node in nodes if node.get("text")]
     ids = [node.get("resource-id") for node in nodes if node.get("resource-id")]
     raise ValueError("荣耀应用市场没有打开可下载的光·遇详情页。当前界面：" + " / ".join(labels[:8])
-                     + "；控件：" + " / ".join(ids[-25:]))
+                     + "；控件：" + " / ".join(ids[:40] + ids[-15:]))
 
 
 def capture(existing_log):
