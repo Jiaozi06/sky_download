@@ -88,6 +88,8 @@ def details(existing_log):
             sleep(1)
             continue
         by_id = {node.get("resource-id"): node for node in nodes}
+        if any(node.get("text") == "本地区暂未提供服务" for node in nodes):
+            raise ValueError("荣耀应用市场的设备地区不受支持，请检查模拟器国家设置")
         version = by_id.get(f"{MARKET}:id/tv_version_name")
         button = by_id.get(f"{MARKET}:id/app_detail_download_btn")
         if version is not None and button is not None:
