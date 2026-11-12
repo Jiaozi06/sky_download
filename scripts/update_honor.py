@@ -17,7 +17,7 @@ MARKET = "com.hihonor.appmarket"
 PACKAGE = "com.netease.sky.honor"
 DUMP = "/sdcard/sky-honor-window.xml"
 RECORD = re.compile(
-    rf"mPkgName='{re.escape(PACKAGE)}', mVersionCode=(\d+), mFlag='downloadButton'"
+    rf"mPkgName='{re.escape(PACKAGE)}', mVersionCode=(\d+),"
     r"[^\r\n]*?mTotalSize=(\d+),[^\r\n]*?mDownloadUrl='"
     r"(https://apppkg-[a-z0-9-]+-drcn\.hihonorcdn\.com/apk/upload_\d+\.apk)'"
 )
@@ -125,11 +125,14 @@ def capture(existing_log):
         adb("shell", "input", "tap", x, y)
     try:
         deadline = monotonic() + 25
+        diagnostics = []
         while monotonic() < deadline:
-            lines = adb("logcat", "-d", "-v", "epoch", "-s", "AMLog[8d4e9cb8fb]:I").splitlines()
+            lines = adb("logcat", "-d", "-v", "epoch", "-t", "4000").splitlines()
             for line in reversed(lines):
                 if not existing_log and (not line[:1].isdigit() or float(line.split()[0]) < start):
                     continue
+                if PACKAGE in line:
+                    diagnostics.append(line[-1200:])
                 match = RECORD.search(line)
                 if match:
                     code, size, url = match.groups()
@@ -143,6 +146,8 @@ def capture(existing_log):
     finally:
         if not existing_log:
             adb("shell", "am", "force-stop", MARKET)
+    for line in dict.fromkeys(diagnostics[-10:]):
+        print(line)
     raise ValueError("荣耀日志没有返回当前渠道包的 CDN 地址")
 
 
