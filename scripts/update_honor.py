@@ -161,6 +161,10 @@ def capture(existing_log):
             sleep(0.3)
     finally:
         if not existing_log:
+            if os.environ.get("GITHUB_ACTIONS") == "true":
+                debug.with_suffix(".log").write_text(adb("logcat", "-d", "-v", "epoch", "-t", "10000"), encoding="utf-8")
+                debug.with_name("honor-detail-after.png").write_bytes(subprocess.check_output(
+                    ("adb", "exec-out", "screencap", "-p"), timeout=25))
             adb("shell", "am", "force-stop", MARKET)
     for line in dict.fromkeys(diagnostics[-10:]):
         print(line)
