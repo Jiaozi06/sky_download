@@ -43,9 +43,11 @@ def tap(node):
 
 def handle_startup(nodes):
     labels = {node.get("text", "") for node in nodes}
-    if any("Launcher" in label and "responding" in label for label in labels):
+    if any("responding" in label for label in labels):
+        launcher = any("Launcher" in label for label in labels)
+        action = "android:id/aerr_close" if launcher else "android:id/aerr_wait"
         for node in nodes:
-            if node.get("resource-id") == "android:id/aerr_close":
+            if node.get("resource-id") == action:
                 return tap(node)
     welcome = "欢迎使用" in labels or "应用市场隐私声明" in labels
     if welcome:

@@ -66,6 +66,7 @@ jobs:
           arch: x86_64
           profile: pixel_5
           disable-animations: true
+          emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -camera-back none -memory 4096 -cores 2
           script: |
             adb root
             adb wait-for-device
@@ -73,6 +74,7 @@ jobs:
             adb shell setprop gsm.sim.operator.iso-country cn
             adb shell setprop gsm.operator.iso-country cn
             adb shell settings put system system_locales zh-CN
+            adb shell settings put global hide_error_dialogs 1
             test "$(adb shell getprop msc.sys.country | tr -d '\r')" = CN
             curl -fL --retry 2 -o "$RUNNER_TEMP/honor-market.apk" https://www.honor.com/content/dam/honor/cn/tech/honor-app-market/img/AppMarket_16.0.40.305_productRelease_20250904152045_ab.apk || { echo '::error::荣耀应用市场 APK 下载失败'; exit 1; }
             echo "548cfe35fe9ce04e15ce11f5861f888ed886d6a5bb28cc378ee9c684b94ee71f  $RUNNER_TEMP/honor-market.apk" | sha256sum -c - || { echo '::error::荣耀应用市场 APK 校验失败'; exit 1; }
