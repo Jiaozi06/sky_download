@@ -2,7 +2,7 @@ name: 更新光遇下载链接
 
 on:
   schedule:
-    - cron: '4-59/10 * * * *'
+    - cron: '4,14,24,34,44,54 * * * *'
   workflow_dispatch:
     inputs:
       refresh_honor:

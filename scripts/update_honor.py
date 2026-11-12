@@ -98,6 +98,18 @@ def details(existing_log):
             if match and len(bounds) == 4:
                 x0, y0, x1, y1 = map(int, bounds)
                 return match[0], str((x0 + x1) // 2), str((y0 + y1) // 2)
+        if button is not None:
+            scrollable = next((node for node in nodes if node.get("scrollable") == "true"
+                               and node.get("package") == MARKET), None)
+            bounds = re.findall(r"\d+", scrollable.get("bounds", "")) if scrollable is not None else []
+            if len(bounds) == 4:
+                x0, y0, x1, y1 = map(int, bounds)
+                x = str((x0 + x1) // 2)
+                adb("shell", "input", "swipe", x, str(y0 + (y1 - y0) * 4 // 5),
+                    x, str(y0 + (y1 - y0) // 4), "400")
+                reopen_at = monotonic() + 10
+                sleep(1)
+                continue
         if not existing_log:
             if handle_startup(nodes):
                 reopen_at = monotonic() + 5
@@ -106,7 +118,9 @@ def details(existing_log):
                 reopen_at = monotonic() + 10
         sleep(1)
     labels = [node.get("text") for node in nodes if node.get("text")]
-    raise ValueError("荣耀应用市场没有打开可下载的光·遇详情页。当前界面：" + " / ".join(labels[:8]))
+    ids = [node.get("resource-id") for node in nodes if node.get("resource-id")]
+    raise ValueError("荣耀应用市场没有打开可下载的光·遇详情页。当前界面：" + " / ".join(labels[:8])
+                     + "；控件：" + " / ".join(ids[-25:]))
 
 
 def capture(existing_log):
