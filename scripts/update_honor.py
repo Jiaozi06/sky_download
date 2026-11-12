@@ -98,24 +98,13 @@ def details(existing_log):
         button = next((by_id[f"{MARKET}:id/{name}"] for name in
                        ("app_detail_download_btn", "app_detail_download_btn_small", "market_download_btn")
                        if f"{MARKET}:id/{name}" in by_id), None)
-        if version is not None and button is not None:
-            match = re.search(r"\d+(?:\.\d+)+", version.get("text", ""))
+        if button is not None and button.get("enabled") == "true":
+            match = re.search(r"\d+(?:\.\d+)+", version.get("text", "")) if version is not None else None
             bounds = re.findall(r"\d+", button.get("bounds", ""))
-            if match and len(bounds) == 4:
-                x0, y0, x1, y1 = map(int, bounds)
-                return match[0], str((x0 + x1) // 2), str((y0 + y1) // 2)
-        if button is not None:
-            scrollable = next((node for node in nodes if node.get("scrollable") == "true"
-                               and node.get("package") == MARKET), None)
-            bounds = re.findall(r"\d+", scrollable.get("bounds", "")) if scrollable is not None else []
             if len(bounds) == 4:
                 x0, y0, x1, y1 = map(int, bounds)
-                x = str((x0 + x1) // 2)
-                adb("shell", "input", "swipe", x, str(y0 + (y1 - y0) * 4 // 5),
-                    x, str(y0 + (y1 - y0) // 4), "400")
-                reopen_at = monotonic() + 10
-                sleep(1)
-                continue
+                if x1 > x0 and y1 > y0:
+                    return match[0] if match else "", str((x0 + x1) // 2), str((y0 + y1) // 2)
         if not existing_log:
             if handle_startup(nodes):
                 reopen_at = monotonic() + 5
@@ -144,8 +133,10 @@ def capture(existing_log):
                 match = RECORD.search(line)
                 if match:
                     code, size, url = match.groups()
-                    return {"url": url, "size": int(size), "version": version,
-                            "version_code": int(code), "verified": True}
+                    release = {"url": url, "size": int(size), "version_code": int(code), "verified": True}
+                    if version:
+                        release["version"] = version
+                    return release
             if existing_log:
                 break
             sleep(0.3)
@@ -185,7 +176,7 @@ def main():
         pending = args.output.with_suffix(".json.tmp")
         pending.write_text(json.dumps(document, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
         pending.replace(args.output)
-    print(f"荣耀 {release['version']} ({release['version_code']}) {release['url']}")
+    print(f"荣耀 {release.get('version', '')} ({release['version_code']}) {release['url']}")
 
 
 if __name__ == "__main__":
