@@ -123,6 +123,16 @@ def capture(existing_log):
     if not existing_log:
         start = int(adb("shell", "date", "+%s").strip())
         adb("shell", "input", "tap", x, y)
+        sleep(1)
+        adb("shell", "uiautomator", "dump", DUMP)
+        try:
+            nodes = list(ElementTree.fromstring(adb("exec-out", "cat", DUMP)).iter("node"))
+            handle_startup(nodes)
+            labels = [node.get("text") or node.get("content-desc") for node in nodes
+                      if node.get("text") or node.get("content-desc")]
+            print("点击下载后的界面：" + " / ".join(labels[:18]))
+        except ElementTree.ParseError:
+            pass
     try:
         deadline = monotonic() + 25
         diagnostics = []
