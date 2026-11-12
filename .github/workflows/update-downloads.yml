@@ -44,7 +44,9 @@ jobs:
         run: |
           before=$(git show HEAD:downloads.json | jq -r '.official_version_code')
           after=$(jq -r '.official_version_code' downloads.json)
-          if [[ "$before" != "$after" || "$REFRESH_HONOR" == true ]]; then
+          honor=$(jq -r '.channels.honor.version_code // 0' downloads.json)
+          verified=$(jq -r '.channels.honor.verified // false' downloads.json)
+          if [[ "$before" != "$after" || "$REFRESH_HONOR" == true || "$honor" -lt "$after" || "$verified" != true ]]; then
             echo 'refresh=true' >> "$GITHUB_OUTPUT"
           fi
       - name: 启用 Android 模拟器加速
@@ -54,6 +56,7 @@ jobs:
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
       - name: 从荣耀应用市场获取 APK 地址
+        id: honor_refresh
         if: ${{ !cancelled() && steps.honor.outputs.refresh == 'true' }}
         continue-on-error: true
         uses: reactivecircus/android-emulator-runner@69c8581131285561115a2e413eb0037446bdc2d6 # v2.35.0
@@ -68,6 +71,7 @@ jobs:
             echo "548cfe35fe9ce04e15ce11f5861f888ed886d6a5bb28cc378ee9c684b94ee71f  $RUNNER_TEMP/honor-market.apk" | sha256sum -c - || { echo '::error::荣耀应用市场 APK 校验失败'; exit 1; }
             result=$(adb install "$RUNNER_TEMP/honor-market.apk" 2>&1) || { echo "::error::荣耀应用市场安装失败：$result"; exit 1; }
             adb shell cmd locale set-app-locales com.hihonor.appmarket --user 0 --locales zh-CN || { echo '::error::荣耀应用市场语言设置失败'; exit 1; }
+            adb shell am force-stop com.google.android.apps.nexuslauncher
             python3 scripts/update_honor.py
       - name: 提交变更
         if: ${{ !cancelled() && steps.checkout.outcome == 'success' }}
@@ -81,3 +85,8 @@ jobs:
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git commit -m '更新光遇下载链接'
           git push origin "HEAD:refs/heads/$DEFAULT_BRANCH"
+      - name: 报告荣耀刷新失败
+        if: ${{ !cancelled() && steps.honor_refresh.outcome == 'failure' }}
+        run: |
+          echo '::error::荣耀刷新失败，已保留上次链接；后续运行将继续重试。'
+          exit 1

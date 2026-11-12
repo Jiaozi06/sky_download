@@ -27,11 +27,50 @@ def adb(*args):
     return subprocess.check_output(("adb", *args), timeout=25).decode("utf-8", "replace")
 
 
+def open_details():
+    adb("shell", "am", "start", "-W", "-a", "android.intent.action.VIEW",
+        "-d", f"honormarket://details?id={PACKAGE}", "-p", MARKET)
+
+
+def tap(node):
+    bounds = re.findall(r"\d+", node.get("bounds", ""))
+    if len(bounds) != 4:
+        return False
+    x0, y0, x1, y1 = map(int, bounds)
+    adb("shell", "input", "tap", str((x0 + x1) // 2), str((y0 + y1) // 2))
+    return True
+
+
+def handle_startup(nodes):
+    labels = {node.get("text", "") for node in nodes}
+    if any("Launcher" in label and "responding" in label for label in labels):
+        for node in nodes:
+            if node.get("resource-id") == "android:id/aerr_close":
+                return tap(node)
+    welcome = "欢迎使用" in labels or "应用市场隐私声明" in labels
+    if welcome:
+        for node in nodes:
+            if node.get("package") == MARKET and node.get("checkable") == "true" and node.get("checked") == "false":
+                return tap(node)
+        for label in ("下一页", "同意", "同意并继续", "同意并使用", "开始使用"):
+            for node in nodes:
+                if node.get("text") == label and node.get("package") == MARKET:
+                    return tap(node)
+    for node in nodes:
+        if node.get("resource-id") in {
+            "com.android.permissioncontroller:id/permission_allow_button",
+            "com.android.permissioncontroller:id/permission_allow_foreground_only_button",
+        }:
+            return tap(node)
+    return False
+
+
 def details(existing_log):
     if not existing_log:
-        adb("shell", "am", "start", "-W", "-a", "android.intent.action.VIEW",
-            "-d", f"honormarket://details?id={PACKAGE}", "-p", MARKET)
-    deadline = monotonic() + 40
+        open_details()
+    deadline = monotonic() + 120
+    reopen_at = monotonic() + 10
+    nodes = []
     while monotonic() < deadline:
         adb("shell", "rm", "-f", DUMP)
         try:
@@ -39,19 +78,26 @@ def details(existing_log):
         except subprocess.CalledProcessError as error:
             if error.returncode != 139:
                 raise
-        nodes = {node.get("resource-id"): node for node in ElementTree.fromstring(
+        nodes = list(ElementTree.fromstring(
             adb("exec-out", "cat", DUMP)
-        ).iter("node")}
-        version = nodes.get(f"{MARKET}:id/tv_version_name")
-        button = nodes.get(f"{MARKET}:id/app_detail_download_btn")
+        ).iter("node"))
+        by_id = {node.get("resource-id"): node for node in nodes}
+        version = by_id.get(f"{MARKET}:id/tv_version_name")
+        button = by_id.get(f"{MARKET}:id/app_detail_download_btn")
         if version is not None and button is not None:
             match = re.search(r"\d+(?:\.\d+)+", version.get("text", ""))
             bounds = re.findall(r"\d+", button.get("bounds", ""))
             if match and len(bounds) == 4:
                 x0, y0, x1, y1 = map(int, bounds)
                 return match[0], str((x0 + x1) // 2), str((y0 + y1) // 2)
+        if not existing_log:
+            if handle_startup(nodes):
+                reopen_at = monotonic() + 5
+            elif monotonic() >= reopen_at:
+                open_details()
+                reopen_at = monotonic() + 10
         sleep(1)
-    labels = [node.get("text") for node in nodes.values() if node.get("text")]
+    labels = [node.get("text") for node in nodes if node.get("text")]
     raise ValueError("荣耀应用市场没有打开可下载的光·遇详情页。当前界面：" + " / ".join(labels[:8]))
 
 
