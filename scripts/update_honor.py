@@ -175,7 +175,7 @@ def capture(existing_log):
         if not existing_log:
             if os.environ.get("GITHUB_ACTIONS") == "true":
                 debug.with_suffix(".log").write_bytes(live_log.read_bytes())
-                debug.with_name("honor-detail-after.png").write_bytes(subprocess.check_output(
+                debug.with_name("honor-detail.after.png").write_bytes(subprocess.check_output(
                     ("adb", "exec-out", "screencap", "-p"), timeout=25))
             adb("shell", "am", "force-stop", MARKET)
             live_log.unlink(missing_ok=True)

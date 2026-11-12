@@ -65,11 +65,14 @@ jobs:
           target: google_apis
           arch: x86_64
           profile: pixel_5
+          # Honor requires about three times the APK size before creating a download task.
+          disk-size: 12G
           disable-animations: true
           emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -camera-back none -memory 4096 -cores 2
           script: |
             adb root
             adb wait-for-device
+            adb shell df -h /data
             adb shell setprop msc.sys.country CN
             adb shell setprop gsm.sim.operator.iso-country cn
             adb shell setprop gsm.operator.iso-country cn
