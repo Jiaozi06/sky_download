@@ -82,6 +82,14 @@ jobs:
             adb shell cmd locale set-app-locales com.hihonor.appmarket --user 0 --locales zh-CN || { echo '::error::荣耀应用市场语言设置失败'; exit 1; }
             adb shell am force-stop com.google.android.apps.nexuslauncher
             python3 scripts/update_honor.py
+      - name: 保存荣耀诊断界面
+        if: ${{ !cancelled() && steps.honor_refresh.outcome == 'failure' }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: honor-diagnostics
+          path: ${{ runner.temp }}/honor-detail.*
+          retention-days: 3
+          if-no-files-found: ignore
       - name: 提交变更
         if: ${{ !cancelled() && steps.checkout.outcome == 'success' }}
         shell: bash

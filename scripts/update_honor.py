@@ -122,6 +122,12 @@ def capture(existing_log):
     version, x, y = details(existing_log)
     if not existing_log:
         start = int(adb("shell", "date", "+%s").strip())
+        debug = Path(os.environ.get("RUNNER_TEMP", ".")) / "honor-detail"
+        if os.environ.get("GITHUB_ACTIONS") == "true":
+            debug.with_suffix(".xml").write_text(adb("exec-out", "cat", DUMP), encoding="utf-8")
+            debug.with_suffix(".png").write_bytes(subprocess.check_output(
+                ("adb", "exec-out", "screencap", "-p"), timeout=25))
+        print(f"点击荣耀下载坐标 {x},{y}")
         adb("shell", "input", "tap", x, y)
         sleep(1)
         adb("shell", "uiautomator", "dump", DUMP)
