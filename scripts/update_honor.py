@@ -94,7 +94,7 @@ def details(existing_log):
         if any(node.get("text") == "本地区暂未提供服务" for node in nodes):
             raise ValueError("荣耀应用市场的设备地区不受支持，请检查模拟器国家设置")
         version = next((by_id[f"{MARKET}:id/{name}"] for name in
-                        ("tv_version_name", "zy_tv_version_name", "tv_version")
+                        ("tv_version_name", "zy_tv_version_name", "tv_version", "app_detail_version")
                         if f"{MARKET}:id/{name}" in by_id), None)
         button = next((by_id[f"{MARKET}:id/{name}"] for name in
                        ("app_detail_download_btn", "app_detail_download_btn_small", "market_download_btn")
@@ -154,6 +154,7 @@ def capture(existing_log):
             lines = (live_log.read_text(encoding="utf-8", errors="replace") if live_log else
                      adb("logcat", "-d", "-v", "epoch", "-s", "AMLog[8d4e9cb8fb]:I")).splitlines()
             for line in reversed(lines):
+                line = line.lstrip()
                 if not existing_log and (not line[:1].isdigit() or float(line.split()[0]) < start):
                     continue
                 if PACKAGE in line:
