@@ -2,7 +2,7 @@
   "schema_version": 1,
   "official_version": "0.16.8",
   "official_version_code": 421629,
-  "updated_at": "2026-11-25T02:29:12+00:00",
+  "updated_at": "2026-11-26T21:51:33+00:00",
   "channels": {
     "official": {
       "url": "https://adl.netease.com/d/g/sky/c/gw?type=android",
@@ -75,10 +75,10 @@
   "international": {
     "google_play": "https://play.google.com/store/apps/details?id=com.tgc.sky.android",
     "huawei": {
-      "url": "https://store-drcn.hispace.dbankcloud.com/dl/appdl/application/apk/ea/ea25dc7f55de497bbd88f9df2845ebf7/com.tgc.sky.android.huawei.2611182307.apk?distOpEntity=HKS",
-      "size": 2162929506,
-      "version": "0.35.5 (431758)",
-      "version_code": 431758,
+      "url": "https://store-drcn.hispace.dbankcloud.com/dl/appdl/application/apk/21/216bdc56b259421294017d4f5fcd2b41/com.tgc.sky.android.huawei.2611260218.apk?distOpEntity=HKS",
+      "size": 2162946126,
+      "version": "0.35.6 (433304)",
+      "version_code": 433304,
       "verified": true
     }
   }
